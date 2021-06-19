@@ -80,7 +80,9 @@ EOF
             exit 1
         fi
         curl https://get.acme.sh | sh
-        ~/.acme.sh/acme.sh  --issue  -d $your_domain  --nginx
+        ~/.acme.sh/acme.sh --server https://api.buypass.com/acme/directory --register-account --accountemail 'sdgly684843@gmail.com'
+        
+        ~/.acme.sh/acme.sh --server https://api.buypass.com/acme/directory --issue  -d $your_domain --keylength ec-256 --days 170 --nginx
         if test -s /root/.acme.sh/$your_domain/fullchain.cer; then
             cert_success="1"
         fi
@@ -89,20 +91,21 @@ EOF
         create_time=`stat -c %Y fullchain.cer`
         now_time=`date +%s`
         minus=$(($now_time - $create_time ))
-        if [  $minus -gt 5184000 ]; then
+        if [  $minus -gt 14,688,000‬ ]; then
             curl https://get.acme.sh | sh
-            ~/.acme.sh/acme.sh  --issue  -d $your_domain  --nginx
+            ~/.acme.sh/acme.sh --renew -d $your_domain --force --ecc
             if test -s /root/.acme.sh/$your_domain/fullchain.cer; then
                 cert_success="1"
             fi
         else 
-            green "检测到域名$your_domain证书存在且未超过60天，无需重新申请"
+            green "检测到域名$your_domain证书存在且未超过90天，无需重新申请"
             cert_success="1"
         fi        
     else 
         mkdir /usr/src/trojan-cert/$your_domain
         curl https://get.acme.sh | sh
-        ~/.acme.sh/acme.sh  --issue  -d $your_domain  --nginx
+        ~/.acme.sh/acme.sh --server https://api.buypass.com/acme/directory --register-account --accountemail 'sdgly684843@gmail.com'
+        ~/.acme.sh/acme.sh --server https://api.buypass.com/acme/directory --issue  -d $your_domain --keylength ec-256 --days 170 --nginx
         if test -s /root/.acme.sh/$your_domain/fullchain.cer; then
             cert_success="1"
         fi
